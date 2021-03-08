@@ -12,6 +12,7 @@ import torchvision
 from torch.utils.data.sampler import SubsetRandomSampler
 import model as md
 import training
+import test
 
 class_names = training.train_data.classes
 print(f'number of classes: {len(class_names)}')
@@ -36,3 +37,6 @@ model_scratch = training.train(10, training.loaders_scratch, md.model_scratch, o
 
 # load the model that got the best validation accuracy
 model_scratch.load_state_dict(torch.load('model_scratch.pt'))
+
+# test function    
+test(training.loaders_scratch, md.model_scratch, criterion_scratch, md.use_cuda)
