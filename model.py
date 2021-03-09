@@ -5,9 +5,7 @@ Created on Mon Mar  8 13:06:15 2021
 @author: tigra
 """
 
-import os
 import torch
-import torchvision
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
