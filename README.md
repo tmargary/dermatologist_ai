@@ -6,7 +6,7 @@ The data and objective are pulled from the 2017 ISIC Challenge on [Skin Lesion A
 
 ![Image of Yaktocat](https://github.com/tmargary/dermatologist_ai/blob/main/images/skin_disease_classes.png)
 
-Classes: ['melanoma', 'nevus', 'seborrheic_keratosis']
+Classes: `['melanoma', 'nevus', 'seborrheic_keratosis']`
 
 CNN architecture:
 ```
