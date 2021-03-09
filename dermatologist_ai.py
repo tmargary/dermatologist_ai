@@ -32,7 +32,7 @@ criterion_scratch = md.nn.CrossEntropyLoss()
 ### TODO: select optimizer
 optimizer_scratch = md.optim.SGD(md.model_scratch.parameters(), lr=0.01)
 
-model_scratch = training.train(10, training.loaders_scratch, md.model_scratch, optimizer_scratch, criterion_scratch, md.use_cuda, 'model_scratch.pt')
+model_scratch = training.train(3, training.loaders_scratch, md.model_scratch, optimizer_scratch, criterion_scratch, md.use_cuda, 'model_scratch.pt')
 
 # load the model that got the best validation accuracy
 model_scratch.load_state_dict(torch.load('model_scratch.pt'))
