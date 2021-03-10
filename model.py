@@ -39,7 +39,7 @@ class Net(nn.Module):
         self.pool = nn.MaxPool2d(2, 2)
         # linear layer (256 * 7 * 7 -> 500)
         self.fc1 = nn.Linear(256 * 7 * 7, 500) # 256 * 7 * 7 flatens to 500 (arbitrary number)
-        self.fc2 = nn.Linear(500, 133) # 500 flatens to 133 (number of output class)
+        self.fc2 = nn.Linear(500, 3) # 500 flatens to 133 (number of output class)
         self.dropout = nn.Dropout(0.30)
     
     def forward(self, x):

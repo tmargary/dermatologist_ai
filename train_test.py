@@ -109,7 +109,7 @@ def train(n_epochs, loaders, model, optimizer, criterion, use_cuda, save_path):
         # print training/validation statistics 
         print('Epoch: {} \tTraining Loss: {:.6f} \tValidation Loss: {:.6f}'.format(epoch, train_loss, valid_loss))
         
-        ## TODO: save the model if validation loss has decreased
+        # save the model if validation loss has decreased
         if valid_loss < valid_loss_min:
             torch.save(model.state_dict(), save_path)
             print('Validation loss decreased ({:.6f} --> {:.6f}).  Saving model ...'.format(valid_loss_min, valid_loss))
