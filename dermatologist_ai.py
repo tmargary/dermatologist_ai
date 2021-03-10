@@ -10,7 +10,6 @@ import torch
 import torchvision
 import torch.nn as nn
 import numpy as np
-
 from torch.utils.data.sampler import SubsetRandomSampler
 import model as md
 import train_test
@@ -21,7 +20,7 @@ print(class_names)
 
 dataiter = iter(train_test.train_loader)
 images, labels = dataiter.next()
-images = images.numpy() 
+images = images.numpy()  
 
 print(images[0].shape)
 
@@ -34,7 +33,8 @@ criterion_scratch = nn.CrossEntropyLoss()
 # optimizer
 optimizer_scratch = md.optim.SGD(md.model_scratch.parameters(), lr=0.01)
 
-model_scratch = train_test.train(5, train_test.loaders_scratch, md.model_scratch, optimizer_scratch, criterion_scratch, md.use_cuda, 'model_scratch.pt')
+model_scratch = train_test.train(15, train_test.loaders_scratch, md.model_scratch, optimizer_scratch, criterion_scratch, md.use_cuda, 'model_scratch.pt')
+train_test.test(train_test.loaders_scratch, md.model_scratch, criterion_scratch, md.use_cuda)
 
 path = torch.load('C://Users/tigra/Desktop/dermatologist_ai/model_scratch.pt')
 model_scratch.load_state_dict(path)
@@ -47,8 +47,5 @@ for batch_idx, (data, target) in enumerate(train_test.loaders_scratch['test']):
     new = (output.cpu().detach().numpy())
     csv = np.vstack([csv, new])
 
-print(csv)
-    
-    
-    
-    
+predictions = np.argmax(csv, axis=1)
+predictions_keratosis = 1 * (predictions == 2)

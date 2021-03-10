@@ -41,8 +41,8 @@ preprocess = {
 
 # choose the training, test, and validation datasets
 train_data = datasets.ImageFolder(data_path + "/train", transform=preprocess['train'])
-valid_data = datasets.ImageFolder(data_path + "/test", transform=preprocess['valid'])
-test_data = datasets.ImageFolder(data_path + "/valid", transform=preprocess['test'])
+valid_data = datasets.ImageFolder(data_path + "/valid", transform=preprocess['valid'])
+test_data = datasets.ImageFolder(data_path + "/test", transform=preprocess['test'])
 
 # choose the training and test datasets
 train_loader = torch.utils.data.DataLoader(train_data, batch_size=batch_size, num_workers=num_workers, shuffle=True)
@@ -140,11 +140,8 @@ def test(loaders, model, criterion, use_cuda):
         test_loss = test_loss/len(test_loader.dataset)
         # convert output probabilities to predicted class
         pred = output.data.max(1, keepdim=True)[1]
-        #print(batch_idx)
-        print(pred)
         # compare predictions to true label
         correct += np.sum(np.squeeze(pred.eq(target.data.view_as(pred))).cpu().numpy())
-        print(correct)
         total += data.size(0)
             
     print('Test Loss: {:.6f}\n'.format(test_loss))
