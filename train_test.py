@@ -9,9 +9,21 @@ import torch
 import numpy as np
 from torchvision import datasets
 import torchvision.transforms as transforms
+import random
+from PIL import ImageFile
+from torchsampler import ImbalancedDatasetSampler
+ImageFile.LOAD_TRUNCATED_IMAGES = True
+
+print("setting rendom seeds")
+torch.backends.cudnn.deterministic = True
+random.seed(1)
+torch.manual_seed(1)
+torch.cuda.manual_seed(1)
+np.random.seed(1)
 
 data_path = "C://Users/tigra/Desktop/data"
 
+print("loading and preprocessing data...")
 # number of subprocesses to use for data loading
 num_workers = 0
 # how many samples per batch to load
@@ -44,11 +56,39 @@ train_data = datasets.ImageFolder(data_path + "/train", transform=preprocess['tr
 valid_data = datasets.ImageFolder(data_path + "/valid", transform=preprocess['valid'])
 test_data = datasets.ImageFolder(data_path + "/test", transform=preprocess['test'])
 
-# choose the training and test datasets
-train_loader = torch.utils.data.DataLoader(train_data, batch_size=batch_size, num_workers=num_workers, shuffle=True)
+# def get_images(dataset):
+#     print("getting img_dict...")
+#     dataset_size = len(dataset)
+#     classes = dataset.classes
+#     num_classes = len(dataset.classes)
+#     img_dict = {}
+#     for i in range(num_classes):
+#         img_dict[classes[i]] = 0
+    
+#     for i in range(dataset_size):
+#         img, label = dataset[i]
+#         img_dict[classes[label]] += 1
+    
+#     return img_dict
+
+# img_dict = get_images(train_data)
+# class_counts = list(img_dict.values())
+
+# print("sampling training set...")
+# num_samples = sum(img_dict.values())
+# class_weights = [sum(img_dict.values())/class_counts[i] for i in range(len(list(img_dict.values())))]
+# labels = []
+# for batch_idx, (data, target) in enumerate(torch.utils.data.DataLoader(train_data, batch_size=batch_size, num_workers=num_workers, shuffle=False)):
+#     labels.extend(target.cpu().detach().numpy())
+# weights = [class_weights[labels[i]] for i in range(int(num_samples))]
+# sampler = torch.utils.data.sampler.WeightedRandomSampler(torch.DoubleTensor(weights), int(num_samples))
+
+# # choose the training and test datasets
+# train_loader = torch.utils.data.DataLoader(train_data, batch_size=batch_size, sampler = sampler, num_workers=num_workers)
+
+train_loader = torch.utils.data.DataLoader(train_data, batch_size=batch_size, sampler=ImbalancedDatasetSampler(train_data), num_workers=num_workers)
 valid_loader = torch.utils.data.DataLoader(valid_data, batch_size=batch_size, num_workers=num_workers, shuffle=False)
 test_loader = torch.utils.data.DataLoader(test_data, batch_size=batch_size, num_workers=num_workers, shuffle=False)
-
 
 loaders_scratch = {
     'train': train_loader,
@@ -56,11 +96,9 @@ loaders_scratch = {
     'test': test_loader
 }
 
-from PIL import ImageFile
-ImageFile.LOAD_TRUNCATED_IMAGES = True
-
 def train(n_epochs, loaders, model, optimizer, criterion, use_cuda, save_path):
     """returns trained model"""
+    print(f"Training model...")
     # initialize tracker for minimum validation loss
     valid_loss_min = np.Inf 
     
@@ -120,7 +158,7 @@ def train(n_epochs, loaders, model, optimizer, criterion, use_cuda, save_path):
 
 
 def test(loaders, model, criterion, use_cuda):
-
+    print(f"Testing model...")
     # monitor test loss and accuracy
     test_loss = 0.
     correct = 0.
