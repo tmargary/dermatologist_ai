@@ -8,6 +8,8 @@ The data and objective are pulled from the 2017 ISIC Challenge on [Skin Lesion A
 
 Classes: `['melanoma', 'nevus', 'seborrheic_keratosis']`
 
+<img width="1161" alt="skin_disease_classes" src="https://user-images.githubusercontent.com/56524296/233860540-890ee2e8-c7b3-4c5c-aca1-cf1cfe23158d.png">
+
 CNN architecture:
 ```
 ----------------------------------------------------------------
